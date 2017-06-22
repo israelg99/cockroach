@@ -1721,17 +1721,7 @@ show_stmt:
 | SHOW JOBS
   {
     /* SKIP DOC */
-    $$.val = &ShowJobs{Cluster: true}
-  }
-| SHOW CLUSTER JOBS
-  {
-    /* SKIP DOC */
-    $$.val = &ShowJobs{Cluster: true}
-  }
-| SHOW LOCAL JOBS
-  {
-    /* SKIP DOC */
-    $$.val = &ShowJobs{Cluster: false}
+    $$.val = &ShowJobs{}
   }
 | SHOW SESSION TRACE
   {

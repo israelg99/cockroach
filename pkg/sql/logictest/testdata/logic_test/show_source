@@ -236,9 +236,3 @@ timestamp age message context operation span
 
 query error unimplemented
 SHOW JOBS
-
-query error unimplemented
-SHOW LOCAL JOBS
-
-query error unimplemented
-SHOW CLUSTER JOBS

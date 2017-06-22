@@ -234,10 +234,9 @@ func TestParse(t *testing.T) {
 		{`SHOW CONSTRAINTS FROM a.b.c`},
 		{`SHOW TABLES FROM a; SHOW COLUMNS FROM b`},
 		{`SHOW USERS`},
+		{`SHOW JOBS`},
 		{`SHOW CLUSTER QUERIES`},
 		{`SHOW LOCAL QUERIES`},
-		{`SHOW CLUSTER JOBS`},
-		{`SHOW LOCAL JOBS`},
 		{`SHOW CLUSTER SESSIONS`},
 		{`SHOW LOCAL SESSIONS`},
 		{`SHOW SESSION TRACE`},
@@ -974,7 +973,6 @@ func TestParse2(t *testing.T) {
 
 		{`SHOW SESSIONS`, `SHOW CLUSTER SESSIONS`},
 		{`SHOW QUERIES`, `SHOW CLUSTER QUERIES`},
-		{`SHOW JOBS`, `SHOW CLUSTER JOBS`},
 
 		{`USE foo`, `SET database = 'foo'`},
 
