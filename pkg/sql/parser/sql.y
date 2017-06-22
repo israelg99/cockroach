@@ -404,7 +404,7 @@ func (u *sqlSymUnion) transactionModes() TransactionModes {
 %token <str>   INNER INSERT INT INT2VECTOR INT8 INT64 INTEGER
 %token <str>   INTERSECT INTERVAL INTO IS ISOLATION
 
-%token <str>   JOB JOIN
+%token <str>   JOB JOBS JOIN
 
 %token <str>   KEY KEYS KV
 
@@ -1717,6 +1717,21 @@ show_stmt:
 | SHOW LOCAL QUERIES
   {
     $$.val = &ShowQueries{Cluster: false}
+  }
+| SHOW JOBS
+  {
+    /* SKIP DOC */
+    $$.val = &ShowJobs{Cluster: true}
+  }
+| SHOW CLUSTER JOBS
+  {
+    /* SKIP DOC */
+    $$.val = &ShowJobs{Cluster: true}
+  }
+| SHOW LOCAL JOBS
+  {
+    /* SKIP DOC */
+    $$.val = &ShowJobs{Cluster: false}
   }
 | SHOW SESSION TRACE
   {
@@ -5386,6 +5401,7 @@ unreserved_keyword:
 | INTERLEAVE
 | ISOLATION
 | JOB
+| JOBS
 | KEY
 | KEYS
 | KV

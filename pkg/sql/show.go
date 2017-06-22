@@ -1055,6 +1055,10 @@ func (p *planner) ShowQueries(ctx context.Context, n *parser.ShowQueries) (planN
 
 }
 
+func (p *planner) ShowJobs(ctx context.Context, n *parser.ShowJobs) (planNode, error) {
+	return nil, pgerror.Unimplemented("show-jobs", "unimplemented")
+}
+
 func (p *planner) ShowSessions(ctx context.Context, n *parser.ShowSessions) (planNode, error) {
 	columns := sqlbase.ResultColumns{
 		{Name: "node_id", Typ: parser.TypeInt},
