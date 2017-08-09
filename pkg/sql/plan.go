@@ -345,6 +345,10 @@ func (p *planner) newPlan(
 		return p.CreateUser(ctx, n)
 	case *parser.CreateView:
 		return p.CreateView(ctx, n)
+	case *parser.CreateFunction:
+		return p.CreateFunction(ctx, n)
+	case *parser.CreateProcedure:
+		return p.CreateProcedure(ctx, n)
 	case *parser.Deallocate:
 		return p.Deallocate(ctx, n)
 	case *parser.Delete:
