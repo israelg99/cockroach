@@ -239,6 +239,7 @@ func doExpandPlan(
 	case *cancelQueryNode:
 	case *controlJobNode:
 	case *cancelTransactionNode:
+	case *cancelSessionNode:
 	case *copyNode:
 	case *createDatabaseNode:
 	case *createIndexNode:
@@ -560,6 +561,7 @@ func simplifyOrderings(plan planNode, usefulOrdering sqlbase.ColumnOrdering) pla
 	case *cancelQueryNode:
 	case *controlJobNode:
 	case *cancelTransactionNode:
+	case *cancelSessionNode:
 	case *copyNode:
 	case *createDatabaseNode:
 	case *createIndexNode:

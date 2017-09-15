@@ -364,6 +364,9 @@ type DistSQLPlannerTestingKnobs struct {
 
 // CancelTransaction cancells all active queries under the txn in addition to rolling it back.
 func (s *Session) CancelTransaction(txnID string, username string) (bool, error) {
+	// Why do we need txnID if we call it from the session??
+	// Are those checks necessary?
+	// Do we need the user?
 	if err := func() error {
 		s.TxnState.mu.Lock()
 		defer s.TxnState.mu.Unlock()

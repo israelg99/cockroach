@@ -21104,6 +21104,416 @@ export const cockroach = $root.cockroach = (() => {
                 return CancelTransactionResponse;
             })();
 
+            serverpb.CancelSessionRequest = (function() {
+
+                /**
+                 * Properties of a CancelSessionRequest.
+                 * @typedef cockroach.server.serverpb.CancelSessionRequest$Properties
+                 * @type {Object}
+                 * @property {string} [session_id] CancelSessionRequest session_id.
+                 * @property {string} [node_id] CancelSessionRequest node_id.
+                 * @property {string} [username] CancelSessionRequest username.
+                 */
+
+                /**
+                 * Constructs a new CancelSessionRequest.
+                 * @exports cockroach.server.serverpb.CancelSessionRequest
+                 * @constructor
+                 * @param {cockroach.server.serverpb.CancelSessionRequest$Properties=} [properties] Properties to set
+                 */
+                function CancelSessionRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CancelSessionRequest session_id.
+                 * @type {string}
+                 */
+                CancelSessionRequest.prototype.session_id = "";
+
+                /**
+                 * CancelSessionRequest node_id.
+                 * @type {string}
+                 */
+                CancelSessionRequest.prototype.node_id = "";
+
+                /**
+                 * CancelSessionRequest username.
+                 * @type {string}
+                 */
+                CancelSessionRequest.prototype.username = "";
+
+                /**
+                 * Creates a new CancelSessionRequest instance using the specified properties.
+                 * @param {cockroach.server.serverpb.CancelSessionRequest$Properties=} [properties] Properties to set
+                 * @returns {cockroach.server.serverpb.CancelSessionRequest} CancelSessionRequest instance
+                 */
+                CancelSessionRequest.create = function create(properties) {
+                    return new CancelSessionRequest(properties);
+                };
+
+                /**
+                 * Encodes the specified CancelSessionRequest message. Does not implicitly {@link cockroach.server.serverpb.CancelSessionRequest.verify|verify} messages.
+                 * @param {cockroach.server.serverpb.CancelSessionRequest$Properties} message CancelSessionRequest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CancelSessionRequest.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.session_id != null && message.hasOwnProperty("session_id"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.session_id);
+                    if (message.node_id != null && message.hasOwnProperty("node_id"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.node_id);
+                    if (message.username != null && message.hasOwnProperty("username"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.username);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified CancelSessionRequest message, length delimited. Does not implicitly {@link cockroach.server.serverpb.CancelSessionRequest.verify|verify} messages.
+                 * @param {cockroach.server.serverpb.CancelSessionRequest$Properties} message CancelSessionRequest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CancelSessionRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a CancelSessionRequest message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {cockroach.server.serverpb.CancelSessionRequest} CancelSessionRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CancelSessionRequest.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.cockroach.server.serverpb.CancelSessionRequest();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.session_id = reader.string();
+                            break;
+                        case 2:
+                            message.node_id = reader.string();
+                            break;
+                        case 3:
+                            message.username = reader.string();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a CancelSessionRequest message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {cockroach.server.serverpb.CancelSessionRequest} CancelSessionRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CancelSessionRequest.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a CancelSessionRequest message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                CancelSessionRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.session_id != null && message.hasOwnProperty("session_id"))
+                        if (!$util.isString(message.session_id))
+                            return "session_id: string expected";
+                    if (message.node_id != null && message.hasOwnProperty("node_id"))
+                        if (!$util.isString(message.node_id))
+                            return "node_id: string expected";
+                    if (message.username != null && message.hasOwnProperty("username"))
+                        if (!$util.isString(message.username))
+                            return "username: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CancelSessionRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {cockroach.server.serverpb.CancelSessionRequest} CancelSessionRequest
+                 */
+                CancelSessionRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.cockroach.server.serverpb.CancelSessionRequest)
+                        return object;
+                    let message = new $root.cockroach.server.serverpb.CancelSessionRequest();
+                    if (object.session_id != null)
+                        message.session_id = String(object.session_id);
+                    if (object.node_id != null)
+                        message.node_id = String(object.node_id);
+                    if (object.username != null)
+                        message.username = String(object.username);
+                    return message;
+                };
+
+                /**
+                 * Creates a CancelSessionRequest message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link cockroach.server.serverpb.CancelSessionRequest.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {cockroach.server.serverpb.CancelSessionRequest} CancelSessionRequest
+                 */
+                CancelSessionRequest.from = CancelSessionRequest.fromObject;
+
+                /**
+                 * Creates a plain object from a CancelSessionRequest message. Also converts values to other types if specified.
+                 * @param {cockroach.server.serverpb.CancelSessionRequest} message CancelSessionRequest
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CancelSessionRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.session_id = "";
+                        object.node_id = "";
+                        object.username = "";
+                    }
+                    if (message.session_id != null && message.hasOwnProperty("session_id"))
+                        object.session_id = message.session_id;
+                    if (message.node_id != null && message.hasOwnProperty("node_id"))
+                        object.node_id = message.node_id;
+                    if (message.username != null && message.hasOwnProperty("username"))
+                        object.username = message.username;
+                    return object;
+                };
+
+                /**
+                 * Creates a plain object from this CancelSessionRequest message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CancelSessionRequest.prototype.toObject = function toObject(options) {
+                    return this.constructor.toObject(this, options);
+                };
+
+                /**
+                 * Converts this CancelSessionRequest to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CancelSessionRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CancelSessionRequest;
+            })();
+
+            serverpb.CancelSessionResponse = (function() {
+
+                /**
+                 * Properties of a CancelSessionResponse.
+                 * @typedef cockroach.server.serverpb.CancelSessionResponse$Properties
+                 * @type {Object}
+                 * @property {boolean} [cancelled] CancelSessionResponse cancelled.
+                 * @property {string} [error] CancelSessionResponse error.
+                 */
+
+                /**
+                 * Constructs a new CancelSessionResponse.
+                 * @exports cockroach.server.serverpb.CancelSessionResponse
+                 * @constructor
+                 * @param {cockroach.server.serverpb.CancelSessionResponse$Properties=} [properties] Properties to set
+                 */
+                function CancelSessionResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CancelSessionResponse cancelled.
+                 * @type {boolean}
+                 */
+                CancelSessionResponse.prototype.cancelled = false;
+
+                /**
+                 * CancelSessionResponse error.
+                 * @type {string}
+                 */
+                CancelSessionResponse.prototype.error = "";
+
+                /**
+                 * Creates a new CancelSessionResponse instance using the specified properties.
+                 * @param {cockroach.server.serverpb.CancelSessionResponse$Properties=} [properties] Properties to set
+                 * @returns {cockroach.server.serverpb.CancelSessionResponse} CancelSessionResponse instance
+                 */
+                CancelSessionResponse.create = function create(properties) {
+                    return new CancelSessionResponse(properties);
+                };
+
+                /**
+                 * Encodes the specified CancelSessionResponse message. Does not implicitly {@link cockroach.server.serverpb.CancelSessionResponse.verify|verify} messages.
+                 * @param {cockroach.server.serverpb.CancelSessionResponse$Properties} message CancelSessionResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CancelSessionResponse.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.cancelled != null && message.hasOwnProperty("cancelled"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).bool(message.cancelled);
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.error);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified CancelSessionResponse message, length delimited. Does not implicitly {@link cockroach.server.serverpb.CancelSessionResponse.verify|verify} messages.
+                 * @param {cockroach.server.serverpb.CancelSessionResponse$Properties} message CancelSessionResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CancelSessionResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a CancelSessionResponse message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {cockroach.server.serverpb.CancelSessionResponse} CancelSessionResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CancelSessionResponse.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.cockroach.server.serverpb.CancelSessionResponse();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.cancelled = reader.bool();
+                            break;
+                        case 2:
+                            message.error = reader.string();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a CancelSessionResponse message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {cockroach.server.serverpb.CancelSessionResponse} CancelSessionResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CancelSessionResponse.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a CancelSessionResponse message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                CancelSessionResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cancelled != null && message.hasOwnProperty("cancelled"))
+                        if (typeof message.cancelled !== "boolean")
+                            return "cancelled: boolean expected";
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        if (!$util.isString(message.error))
+                            return "error: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CancelSessionResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {cockroach.server.serverpb.CancelSessionResponse} CancelSessionResponse
+                 */
+                CancelSessionResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.cockroach.server.serverpb.CancelSessionResponse)
+                        return object;
+                    let message = new $root.cockroach.server.serverpb.CancelSessionResponse();
+                    if (object.cancelled != null)
+                        message.cancelled = Boolean(object.cancelled);
+                    if (object.error != null)
+                        message.error = String(object.error);
+                    return message;
+                };
+
+                /**
+                 * Creates a CancelSessionResponse message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link cockroach.server.serverpb.CancelSessionResponse.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {cockroach.server.serverpb.CancelSessionResponse} CancelSessionResponse
+                 */
+                CancelSessionResponse.from = CancelSessionResponse.fromObject;
+
+                /**
+                 * Creates a plain object from a CancelSessionResponse message. Also converts values to other types if specified.
+                 * @param {cockroach.server.serverpb.CancelSessionResponse} message CancelSessionResponse
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CancelSessionResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.cancelled = false;
+                        object.error = "";
+                    }
+                    if (message.cancelled != null && message.hasOwnProperty("cancelled"))
+                        object.cancelled = message.cancelled;
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        object.error = message.error;
+                    return object;
+                };
+
+                /**
+                 * Creates a plain object from this CancelSessionResponse message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CancelSessionResponse.prototype.toObject = function toObject(options) {
+                    return this.constructor.toObject(this, options);
+                };
+
+                /**
+                 * Converts this CancelSessionResponse to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CancelSessionResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CancelSessionResponse;
+            })();
+
             serverpb.SpanStatsRequest = (function() {
 
                 /**
@@ -23989,6 +24399,33 @@ export const cockroach = $root.cockroach = (() => {
                  * @function
                  * @param {cockroach.server.serverpb.CancelTransactionRequest|Object.<string,*>} request CancelTransactionRequest message or plain object
                  * @returns {Promise<cockroach.server.serverpb.CancelTransactionResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link Status#cancelSession}.
+                 * @typedef Status_cancelSession_Callback
+                 * @type {function}
+                 * @param {?Error} error Error, if any
+                 * @param {cockroach.server.serverpb.CancelSessionResponse} [response] CancelSessionResponse
+                 */
+
+                /**
+                 * Calls CancelSession.
+                 * @param {cockroach.server.serverpb.CancelSessionRequest|Object.<string,*>} request CancelSessionRequest message or plain object
+                 * @param {Status_cancelSession_Callback} callback Node-style callback called with the error, if any, and CancelSessionResponse
+                 * @returns {undefined}
+                 */
+                Status.prototype.cancelSession = function cancelSession(request, callback) {
+                    return this.rpcCall(cancelSession, $root.cockroach.server.serverpb.CancelSessionRequest, $root.cockroach.server.serverpb.CancelSessionResponse, request, callback);
+                };
+
+                /**
+                 * Calls CancelSession.
+                 * @name Status#cancelSession
+                 * @function
+                 * @param {cockroach.server.serverpb.CancelSessionRequest|Object.<string,*>} request CancelSessionRequest message or plain object
+                 * @returns {Promise<cockroach.server.serverpb.CancelSessionResponse>} Promise
                  * @variation 2
                  */
 

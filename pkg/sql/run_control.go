@@ -17,8 +17,6 @@ package sql
 import (
 	"fmt"
 
-	"github.com/cockroachdb/cockroach/pkg/sql/pgwire/pgerror"
-
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
 
@@ -273,6 +271,70 @@ func (p *planner) CancelTransaction(ctx context.Context, n *parser.CancelTransac
 	}, nil
 }
 
+type cancelSessionNode struct {
+	p      *planner
+	sessID parser.TypedExpr
+}
+
+func (*cancelSessionNode) Values() parser.Datums { return nil }
+
+func (n *cancelSessionNode) Start(params runParams) error {
+	statusServer := n.p.session.execCfg.StatusServer
+
+	sessIDDatum, err := n.sessID.Eval(&n.p.evalCtx)
+	if err != nil {
+		return err
+	}
+	sessIDStr := parser.AsStringWithFlags(sessIDDatum, parser.FmtBareStrings)
+	sessID, err := uint128.FromString(sessIDStr)
+	if err != nil {
+		return errors.Wrapf(err, "invalid session ID '%s'", sessIDStr)
+	}
+
+	// Get the lowest 32 bits of the sess ID.
+	nodeID := 0xFFFFFFFF & sessID.Lo
+
+	request := &serverpb.CancelSessionRequest{
+		SessionId: sessIDStr,
+		NodeId:    fmt.Sprintf("%d", nodeID),
+		Username:  n.p.session.User,
+	}
+
+	response, err := statusServer.CancelSession(params.ctx, request)
+	if err != nil {
+		return err
+	}
+
+	if !response.Cancelled {
+		return fmt.Errorf("could not cancel session %s: %s", sessID, response.Error)
+	}
+
+	return nil
+}
+
+func (*cancelSessionNode) Close(context.Context) {}
+
+func (n *cancelSessionNode) Next(runParams) (bool, error) {
+	return false, nil
+}
+
 func (p *planner) CancelSession(ctx context.Context, n *parser.CancelSession) (planNode, error) {
-	return nil, pgerror.Unimplemented("cancel session", "cancel session is not supported yet!")
+
+	typedSessID, err := p.analyzeExpr(
+		ctx,
+		n.ID,
+		nil,
+		parser.IndexedVarHelper{},
+		parser.TypeString,
+		true, /* requireType */
+		"CANCEL SESSION",
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cancelSessionNode{
+		p:      p,
+		sessID: typedSessID,
+	}, nil
 }

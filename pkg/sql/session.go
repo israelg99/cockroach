@@ -222,6 +222,9 @@ type Session struct {
 	// ClientAddr is the client's IP address and port.
 	ClientAddr string
 
+	// Id of the session.
+	Id uint128.Uint128
+
 	//
 	// State structures for the logical SQL session.
 	//
@@ -381,24 +384,24 @@ type SessionArgs struct {
 // Use register() and deregister() to modify this registry.
 type SessionRegistry struct {
 	syncutil.Mutex
-	store map[*Session]struct{}
+	store map[uint128.Uint128]*Session
 }
 
 // MakeSessionRegistry creates a new SessionRegistry with an empty set
 // of sessions.
 func MakeSessionRegistry() *SessionRegistry {
-	return &SessionRegistry{store: make(map[*Session]struct{})}
+	return &SessionRegistry{store: make(map[uint128.Uint128]*Session)}
 }
 
 func (r *SessionRegistry) register(s *Session) {
 	r.Lock()
-	r.store[s] = struct{}{}
+	r.store[s.Id] = s
 	r.Unlock()
 }
 
 func (r *SessionRegistry) deregister(s *Session) {
 	r.Lock()
-	delete(r.store, s)
+	delete(r.store, s.Id)
 	r.Unlock()
 }
 
@@ -412,7 +415,7 @@ func (r *SessionRegistry) CancelQuery(queryIDStr string, username string) (bool,
 	r.Lock()
 	defer r.Unlock()
 
-	for session := range r.store {
+	for _, session := range r.store {
 		if !(username == security.RootUser || username == session.User) {
 			// Skip this session.
 			continue
@@ -431,6 +434,33 @@ func (r *SessionRegistry) CancelQuery(queryIDStr string, username string) (bool,
 	return false, fmt.Errorf("query ID %s not found", queryID)
 }
 
+// CancelSession looks up the associated session in the session registry and cancels it.
+func (r *SessionRegistry) Cancel(sessIDStr string, username string) (bool, error) {
+	sessID, err := uint128.FromString(sessIDStr)
+	if err != nil {
+		return false, fmt.Errorf("session ID %s malformed: %s", sessID, err)
+	}
+
+	r.Lock()
+	defer r.Unlock()
+
+	session := r.store[sessID]
+	if !(username == security.RootUser || username == session.User) {
+		return false, fmt.Errorf("user is not authorized to cancel the session")
+	}
+
+	// Dummy-prototype code.
+	// Waiting for a working txn cancellation implementation.
+	// Do we need to wait for the txn to cancel before closing session?
+	// Can we close session without "cancelling" the txn?
+	// The EmergencyClose() should take care of the txn/txnState, no?
+	session.CancelTransaction(session.TxnState.mu.txn.ID().String(), username)
+	session.EmergencyClose()
+	r.deregister(session)
+
+	return true, nil
+}
+
 // SerializeAll returns a slice of all sessions in the registry, converted to serverpb.Sessions.
 func (r *SessionRegistry) SerializeAll() []serverpb.Session {
 	r.Lock()
@@ -438,7 +468,7 @@ func (r *SessionRegistry) SerializeAll() []serverpb.Session {
 
 	response := make([]serverpb.Session, 0, len(r.store))
 
-	for s := range r.store {
+	for _, s := range r.store {
 		response = append(response, s.serialize())
 	}
 
@@ -452,7 +482,7 @@ func (r *SessionRegistry) CancelTransaction(txnID string, username string) error
 
 	var found bool
 	var err error
-	for s := range r.store {
+	for _, s := range r.store {
 		found, err = s.CancelTransaction(txnID, username)
 		if found {
 			return err
@@ -485,6 +515,7 @@ func NewSession(
 			applicationName: args.ApplicationName,
 			database:        args.Database,
 		},
+		Id: e.generateID(),
 		tables: TableCollection{
 			leaseMgr:      e.cfg.LeaseManager,
 			databaseCache: e.getDatabaseCache(),

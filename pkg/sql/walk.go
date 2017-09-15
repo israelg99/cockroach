@@ -419,6 +419,10 @@ func (v *planVisitor) visit(plan planNode) {
 	case *cancelTransactionNode:
 		subplans := v.expr(name, "txnID", -1, n.txnID, nil)
 		v.subqueries(name, subplans)
+
+	case *cancelSessionNode:
+		subplans := v.expr(name, "sessID", -1, n.sessID, nil)
+		v.subqueries(name, subplans)
 	}
 }
 
@@ -525,6 +529,7 @@ var planNodeNames = map[reflect.Type]string{
 	reflect.TypeOf(&alterTableNode{}):        "alter table",
 	reflect.TypeOf(&cancelQueryNode{}):       "cancel query",
 	reflect.TypeOf(&cancelTransactionNode{}): "cancel transaction",
+	reflect.TypeOf(&cancelSessionNode{}):     "cancel session",
 	reflect.TypeOf(&controlJobNode{}):        "control job",
 	reflect.TypeOf(&copyNode{}):              "copy",
 	reflect.TypeOf(&createDatabaseNode{}):    "create database",

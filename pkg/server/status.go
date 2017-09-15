@@ -1296,6 +1296,37 @@ func (s *statusServer) CancelTransaction(
 	return output, nil
 }
 
+// CancelSession responds to a session cancellation request
+// by canceling the txn and closing the connection with the client.
+func (s *statusServer) CancelSession(
+	ctx context.Context, req *serverpb.CancelSessionRequest,
+) (*serverpb.CancelSessionResponse, error) {
+	ctx = s.AnnotateCtx(ctx)
+	nodeID, local, err := s.parseNodeID(req.NodeId)
+
+	if err != nil {
+		return nil, grpc.Errorf(codes.InvalidArgument, err.Error())
+	}
+
+	if !local {
+		status, err := s.dialNode(nodeID)
+		if err != nil {
+			return nil, err
+		}
+		return status.CancelSession(ctx, req)
+	}
+
+	output := &serverpb.CancelSessionResponse{}
+	cancelled, err := s.sessionRegistry.Cancel(req.SessionId, req.Username)
+
+	if err != nil {
+		output.Error = err.Error()
+	}
+
+	output.Cancelled = cancelled
+	return output, nil
+}
+
 // SpanStats requests the total statistics stored on a node for a given key
 // span, which may include multiple ranges.
 func (s *statusServer) SpanStats(

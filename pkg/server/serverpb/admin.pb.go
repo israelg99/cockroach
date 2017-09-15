@@ -98,6 +98,8 @@
 		CancelQueryResponse
 		CancelTransactionRequest
 		CancelTransactionResponse
+		CancelSessionRequest
+		CancelSessionResponse
 		SpanStatsRequest
 		SpanStatsResponse
 		ProblemRangesRequest
