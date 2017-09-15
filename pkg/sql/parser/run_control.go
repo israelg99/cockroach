@@ -70,3 +70,14 @@ func (node *CancelTransaction) Format(buf *bytes.Buffer, f FmtFlags) {
 	buf.WriteString("CANCEL TRANSACTION ")
 	FormatNode(buf, f, node.ID)
 }
+
+// CancelSession represents a CANCEL SESSION statement.
+type CancelSession struct {
+	ID Expr
+}
+
+// Format implements the NodeFormatter interface.
+func (node *CancelSession) Format(buf *bytes.Buffer, f FmtFlags) {
+	buf.WriteString("CANCEL SESSION ")
+	FormatNode(buf, f, node.ID)
+}

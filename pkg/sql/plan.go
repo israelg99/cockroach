@@ -332,6 +332,8 @@ func (p *planner) newPlan(
 		return p.CancelQuery(ctx, n)
 	case *parser.CancelTransaction:
 		return p.CancelTransaction(ctx, n)
+	case *parser.CancelSession:
+		return p.CancelSession(ctx, n)
 	case *parser.CancelJob:
 		return p.CancelJob(ctx, n)
 	case CopyDataBlock:

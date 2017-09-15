@@ -17,6 +17,8 @@ package sql
 import (
 	"fmt"
 
+	"github.com/cockroachdb/cockroach/pkg/sql/pgwire/pgerror"
+
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
 
@@ -269,4 +271,8 @@ func (p *planner) CancelTransaction(ctx context.Context, n *parser.CancelTransac
 		p:     p,
 		txnID: typedTxnID,
 	}, nil
+}
+
+func (p *planner) CancelSession(ctx context.Context, n *parser.CancelSession) (planNode, error) {
+	return nil, pgerror.Unimplemented("cancel session", "cancel session is not supported yet!")
 }

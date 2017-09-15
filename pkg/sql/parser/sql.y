@@ -504,6 +504,7 @@ func (u *sqlSymUnion) transactionModes() TransactionModes {
 %type <Statement> cancel_job_stmt
 %type <Statement> cancel_query_stmt
 %type <Statement> cancel_transaction_stmt
+%type <Statement> cancel_session_stmt
 
 %type <Statement> commit_stmt
 %type <Statement> copy_from_stmt
@@ -1379,11 +1380,12 @@ copy_from_stmt:
 
 // %Help: CANCEL
 // %Category: Group
-// %Text: CANCEL JOB, CANCEL QUERY, CANCEL TRANSACTION
+// %Text: CANCEL JOB, CANCEL QUERY, CANCEL TRANSACTION, CANCEL SESSION
 cancel_stmt:
   cancel_job_stmt         // EXTEND WITH HELP: CANCEL JOB
 | cancel_query_stmt       // EXTEND WITH HELP: CANCEL QUERY
 | cancel_transaction_stmt // EXTEND WITH HELP: CANCEL TRANSACTION
+| cancel_session_stmt     // EXTEND WITH HELP: CANCEL SESSION
 | CANCEL error            // SHOW HELP: CANCEL
 
 // %Help: CANCEL JOB - cancel a background job
@@ -1418,6 +1420,18 @@ cancel_transaction_stmt:
     $$.val = &CancelTransaction{ID: $3.expr()}
   }
 | CANCEL TRANSACTION error // SHOW HELP: CANCEL TRANSACTION
+
+// %Help: CANCEL SESSION - cancel a running session
+// %Category: Misc
+// %Text: CANCEL SESSION <sessid>
+// %SeeAlso: CANCEL TRANSACTION
+cancel_session_stmt:
+  CANCEL SESSION a_expr
+  {
+    $$.val = &CancelSession{ID: $3.expr()}
+  }
+| CANCEL SESSION error // SHOW HELP: CANCEL SESSION
+
 
 // %Help: CREATE
 // %Category: Group
